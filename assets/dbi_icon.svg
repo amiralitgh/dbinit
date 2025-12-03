@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <defs>
+    <radialGradient id="g" cx="35%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#7EE6FF"/>
+      <stop offset="60%" stop-color="#3AA0D8"/>
+      <stop offset="100%" stop-color="#1D3B66"/>
+    </radialGradient>
+  </defs>
+  <rect x="0" y="0" width="256" height="256" rx="28" ry="28" fill="url(#g)"/>
+  <circle cx="128" cy="128" r="72" fill="none" stroke="#E8F5FF" stroke-width="10" />
+  <circle cx="128" cy="128" r="28" fill="#E8F5FF"/>
+  <path d="M 40 128 L 216 128" stroke="#E8F5FF" stroke-width="6" stroke-linecap="round"/>
+  <path d="M 128 40 L 128 216" stroke="#E8F5FF" stroke-width="6" stroke-linecap="round"/>
+  <title>DBI Icon</title>
+</svg>
