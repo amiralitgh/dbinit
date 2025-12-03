@@ -1132,6 +1132,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.beta.setValue(beta)
             self.x0.setValue(x0)
             self.y0.setValue(y0)
+            self.state.breather.A = A
+            self.state.breather.beta = beta
             self.state.breather.x0 = x0
             self.state.breather.y0 = y0
             self._log(
@@ -1158,16 +1160,11 @@ class MainWindow(QtWidgets.QMainWindow):
         dlg = QtWidgets.QDialog(self)
         dlg.setWindowTitle("Set Breather Center (x0, y0)")
         form = QtWidgets.QFormLayout(dlg)
-        layout = QtWidgets.QVBoxLayout(dlg)
         info = QtWidgets.QLabel(
             "The breather center (x0, y0) is the point where the localized mode is centered.\n"
             "You can enter coordinates manually or click 'Pick on canvas' to choose visually."
-            "Choose how to set the breather center (x0, y0). You can evaluate an expression, "
-            "enter coordinates manually, or pick directly on the canvas."
         )
         info.setWordWrap(True)
-        layout.addWidget(info)
-
         sx0 = QtWidgets.QDoubleSpinBox()
         sx0.setRange(-1e12, 1e12)
         sx0.setDecimals(6)
@@ -1177,115 +1174,20 @@ class MainWindow(QtWidgets.QMainWindow):
         sy0.setDecimals(6)
         sy0.setValue(self.y0.value())
 
-        tabs = QtWidgets.QTabWidget()
-
-        # --- Expression tab ---
-        expr_widget = QtWidgets.QWidget()
-        expr_layout = QtWidgets.QVBoxLayout(expr_widget)
-        expr_hint = QtWidgets.QLabel(
-            "Use simple vector math; pos(id) returns the (x, y) coordinates of an atom ID.\n"
-            "Examples: pos(12), (pos(10) + pos(20)) / 2"
-        )
-        expr_hint.setWordWrap(True)
-        expr_input = QtWidgets.QLineEdit()
-        expr_input.setPlaceholderText("(pos(10) + pos(20)) / 2")
-        expr_result = QtWidgets.QLabel("")
-        eval_btn = QtWidgets.QPushButton("Evaluate expression")
-
-        id_to_index = {int(i): idx for idx, i in enumerate(self.dataset.ids)}
-
-        def _eval_expr():
-            expr = expr_input.text().strip()
-            if not expr:
-                QtWidgets.QMessageBox.warning(
-                    dlg,
-                    "No expression",
-                    "Enter an expression such as pos(12) or (pos(1)+pos(2))/2.",
-                )
-                return
-
-            def pos(atom_id):
-                try:
-                    aid = int(atom_id)
-                except (TypeError, ValueError):
-                    raise ValueError(f"Invalid atom id: {atom_id}")
-                if aid not in id_to_index:
-                    raise ValueError(f"Atom id {aid} not found in dataset")
-                idx = id_to_index[aid]
-                return np.array([self.dataset.x[idx], self.dataset.y[idx]], dtype=float)
-
-            try:
-                res = eval(expr, {"__builtins__": {}}, {"pos": pos, "np": np})
-            except Exception as exc:  # noqa: BLE001
-                QtWidgets.QMessageBox.critical(
-                    dlg,
-                    "Expression error",
-                    f"Could not evaluate expression:\n{exc}",
-                )
-                return
-
-            try:
-                vec = np.asarray(res, dtype=float).reshape(-1)
-            except Exception as exc:  # noqa: BLE001
-                QtWidgets.QMessageBox.critical(
-                    dlg,
-                    "Expression error",
-                    f"Result is not numeric:\n{exc}",
-                )
-                return
-
-            if vec.size < 2:
-                QtWidgets.QMessageBox.critical(
-                    dlg,
-                    "Expression error",
-                    "Result must have at least two components (x and y).",
-                )
-                return
-
-            sx0.setValue(float(vec[0]))
-            sy0.setValue(float(vec[1]))
-            expr_result.setText(f"Result: x0={vec[0]:.6f}, y0={vec[1]:.6f}")
-
-        eval_btn.clicked.connect(_eval_expr)
-
-        expr_layout.addWidget(expr_hint)
-        expr_layout.addWidget(expr_input)
-        expr_layout.addWidget(eval_btn)
-        expr_layout.addWidget(expr_result)
-        expr_layout.addStretch(1)
-        tabs.addTab(expr_widget, "Expression")
-
-        # --- Manual tab ---
-        manual_widget = QtWidgets.QWidget()
-        manual_form = QtWidgets.QFormLayout(manual_widget)
-        manual_form.addRow("x0:", sx0)
-        manual_form.addRow("y0:", sy0)
-        tabs.addTab(manual_widget, "Manual")
-
-        # --- Pick on canvas tab ---
-        pick_widget = QtWidgets.QWidget()
-        pick_layout = QtWidgets.QVBoxLayout(pick_widget)
         pick_btn = QtWidgets.QPushButton("Pick on canvas")
         picked_label = QtWidgets.QLabel("")
-        pick_layout.addWidget(QtWidgets.QLabel("Click to pick the center directly on the canvas."))
-        pick_layout.addWidget(pick_btn)
-        pick_layout.addWidget(picked_label)
-        pick_layout.addStretch(1)
-        tabs.addTab(pick_widget, "Pick on canvas")
 
         form.addRow(info)
         form.addRow("x0:", sx0)
         form.addRow("y0:", sy0)
         form.addRow(pick_btn)
         form.addRow(picked_label)
-        layout.addWidget(tabs)
 
         btns = QtWidgets.QDialogButtonBox(
             QtWidgets.QDialogButtonBox.StandardButton.Ok
             | QtWidgets.QDialogButtonBox.StandardButton.Cancel
         )
         form.addRow(btns)
-        layout.addWidget(btns)
 
         def accept_vals():
             self.x0.setValue(sx0.value())
