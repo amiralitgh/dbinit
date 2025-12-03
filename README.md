@@ -1,11 +1,7 @@
 # DBinit
 A helper to write Discrete Breather initial displacements for LAMMPS simulations of a 2d data file.
 
----
-
 ## Installation
-
-DBinit is a small Python / PyQt application. The easiest way to run it from source is:
 
 ```bash
 git clone https://github.com/amiralitgh/dbinit.git
