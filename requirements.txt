@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 PyQt6
 pyqtgraph
 numpy
+=======
+PyQt6
+pyqtgraph
+numpy
+>>>>>>> 59270780c85ed7169e4c418651d97781dca91635

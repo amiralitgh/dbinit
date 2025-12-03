@@ -8,3 +8,6 @@ __pycache__/
 # Misc
 *.log
 .DS_Store
+.venv/
+__pycache__/
+.pyc
