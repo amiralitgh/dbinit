@@ -15,4 +15,3 @@ pip install -r requirements.txt
 
 # run the app
 python -m dbi
->>>>>>> 59270780c85ed7169e4c418651d97781dca91635
