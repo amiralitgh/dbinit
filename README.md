@@ -1,2 +1,2 @@
 # dBinit
-A pyhthon GUI helper to write your Discrete Breather and DNVM initial displacements for LAMMPS simulations
+A helper to write your Discrete Breather initial displacements for LAMMPS simulations of a 2d data file.
