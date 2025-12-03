@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "discrete-breather-init"
+version = "0.1.1"
+description = "Discrete Breather Init (DBI): Visual DNVM/discrete-breather selection and numeric displacement export for LAMMPS."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name="Your Name", email="you@example.com" }]
+license = { text = "MIT" }
+dependencies = ["PyQt6", "pyqtgraph", "numpy"]
+
+[project.scripts]
+dbi = "dbi.__main__:main"
