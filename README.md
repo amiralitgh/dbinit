@@ -1,11 +1,5 @@
-# dBinit
-A helper to write Discrete Breather initial displacements for LAMMPS simulations of a 2d data file.
-
----
-
 # DBinit
-
-A helper to write Discrete Breather initial displacements for LAMMPS simulations of a 2D data file.
+A helper to write Discrete Breather initial displacements for LAMMPS simulations of a 2d data file.
 
 ---
 
